@@ -116,7 +116,7 @@ class Encoder_libjpeg : public Thread {
         }
 
         ~Encoder_libjpeg() {
-            CAMHAL_LOGVB("~Encoder_libjpeg(%p)", this);
+            CAMHAL_ALOGVB("~Encoder_libjpeg(%p)", this);
         }
 
         virtual bool threadLoop() {

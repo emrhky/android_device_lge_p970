@@ -266,7 +266,8 @@ void ExifElementsTable::insertExifToJpeg(unsigned char* jpeg, size_t jpeg_size) 
     ResetJpgfile();
     if (ReadJpegSectionsFromBuffer(jpeg, jpeg_size, read_mode)) {
         jpeg_opened = true;
-        create_EXIF(table, exif_tag_count, gps_tag_count);
+// TODO(racoon): exif hasDateTag check dirty
+        create_EXIF(table, exif_tag_count, gps_tag_count, 1);
     }
 }
 

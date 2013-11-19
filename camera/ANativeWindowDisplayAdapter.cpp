@@ -50,27 +50,27 @@ OMX_COLOR_FORMATTYPE toOMXPixFormat(const char* parameters_format)
     {
         if (strcmp(parameters_format, (const char *) CameraParameters::PIXEL_FORMAT_YUV422I) == 0)
             {
-            CAMHAL_LOGDA("CbYCrY format selected");
+            CAMHAL_ALOGDA("CbYCrY format selected");
             pixFormat = OMX_COLOR_FormatCbYCrY;
             }
         else if(strcmp(parameters_format, (const char *) CameraParameters::PIXEL_FORMAT_YUV420SP) == 0)
             {
-            CAMHAL_LOGDA("YUV420SP format selected");
+            CAMHAL_ALOGDA("YUV420SP format selected");
             pixFormat = OMX_COLOR_FormatYUV420SemiPlanar;
             }
         else if(strcmp(parameters_format, (const char *) CameraParameters::PIXEL_FORMAT_RGB565) == 0)
             {
-            CAMHAL_LOGDA("RGB565 format selected");
+            CAMHAL_ALOGDA("RGB565 format selected");
             pixFormat = OMX_COLOR_Format16bitRGB565;
             }
         else
             {
-            CAMHAL_LOGDA("Invalid format, CbYCrY format selected as default");
+            CAMHAL_ALOGDA("Invalid format, CbYCrY format selected as default");
             pixFormat = OMX_COLOR_FormatCbYCrY;
         }
     }
     else {
-        CAMHAL_LOGEA("Preview format is NULL, defaulting to CbYCrY");
+        CAMHAL_ALOGEA("Preview format is NULL, defaulting to CbYCrY");
         pixFormat = OMX_COLOR_FormatCbYCrY;
     }
 
@@ -85,30 +85,30 @@ const char* getPixFormatConstant(const char* parameters_format)
     {
         if (strcmp(parameters_format, (const char *) CameraParameters::PIXEL_FORMAT_YUV422I) == 0)
         {
-            CAMHAL_LOGVA("CbYCrY format selected");
+            CAMHAL_ALOGVA("CbYCrY format selected");
             pixFormat = (const char *) CameraParameters::PIXEL_FORMAT_YUV422I;
         }
         else if(strcmp(parameters_format, (const char *) CameraParameters::PIXEL_FORMAT_YUV420SP) == 0 ||
                 strcmp(parameters_format, (const char *) CameraParameters::PIXEL_FORMAT_YUV420P) == 0)
         {
             // TODO(XXX): We are treating YV12 the same as YUV420SP
-            CAMHAL_LOGVA("YUV420SP format selected");
+            CAMHAL_ALOGVA("YUV420SP format selected");
             pixFormat = (const char *) CameraParameters::PIXEL_FORMAT_YUV420SP;
         }
         else if(strcmp(parameters_format, (const char *) CameraParameters::PIXEL_FORMAT_RGB565) == 0)
         {
-            CAMHAL_LOGVA("RGB565 format selected");
+            CAMHAL_ALOGVA("RGB565 format selected");
             pixFormat = (const char *) CameraParameters::PIXEL_FORMAT_RGB565;
         }
         else
         {
-            CAMHAL_LOGEA("Invalid format, CbYCrY format selected as default");
+            CAMHAL_ALOGEA("Invalid format, CbYCrY format selected as default");
             pixFormat = (const char *) CameraParameters::PIXEL_FORMAT_YUV422I;
         }
     }
     else
     {
-        CAMHAL_LOGEA("Preview format is NULL, defaulting to CbYCrY");
+        CAMHAL_ALOGEA("Preview format is NULL, defaulting to CbYCrY");
         pixFormat = (const char *) CameraParameters::PIXEL_FORMAT_YUV422I;
     }
 
@@ -132,11 +132,11 @@ const size_t getBufSize(const char* parameters_format, int width, int height)
                       (const char *) CameraParameters::PIXEL_FORMAT_RGB565) == 0) {
             buf_size = width * height * 2;
         } else {
-            CAMHAL_LOGEA("Invalid format");
+            CAMHAL_ALOGEA("Invalid format");
             buf_size = 0;
         }
     } else {
-        CAMHAL_LOGEA("Preview format is NULL");
+        CAMHAL_ALOGEA("Preview format is NULL");
         buf_size = 0;
     }
 
@@ -249,7 +249,7 @@ status_t ANativeWindowDisplayAdapter::initialize()
     mDisplayThread = new DisplayThread(this);
     if ( !mDisplayThread.get() )
         {
-        CAMHAL_LOGEA("Couldn't create display thread");
+        CAMHAL_ALOGEA("Couldn't create display thread");
         LOG_FUNCTION_NAME_EXIT;
         return NO_MEMORY;
     }
@@ -258,7 +258,7 @@ status_t ANativeWindowDisplayAdapter::initialize()
     status_t ret = mDisplayThread->run("DisplayThread", PRIORITY_URGENT_DISPLAY);
     if ( ret != NO_ERROR )
         {
-        CAMHAL_LOGEA("Couldn't run display thread");
+        CAMHAL_ALOGEA("Couldn't run display thread");
         LOG_FUNCTION_NAME_EXIT;
         return ret;
     }
@@ -274,7 +274,7 @@ int ANativeWindowDisplayAdapter::setPreviewWindow(preview_stream_ops_t* window)
     ///Note that Display Adapter cannot work without a valid window object
     if ( !window)
         {
-        CAMHAL_LOGEA("NULL window object passed to DisplayAdapter");
+        CAMHAL_ALOGEA("NULL window object passed to DisplayAdapter");
         LOG_FUNCTION_NAME_EXIT;
         return BAD_VALUE;
     }
@@ -296,7 +296,7 @@ int ANativeWindowDisplayAdapter::setFrameProvider(FrameNotifier *frameProvider)
 
     // Check for NULL pointer
     if ( !frameProvider ) {
-        CAMHAL_LOGEA("NULL passed for frame provider");
+        CAMHAL_ALOGEA("NULL passed for frame provider");
         LOG_FUNCTION_NAME_EXIT;
         return BAD_VALUE;
     }
@@ -324,7 +324,7 @@ int ANativeWindowDisplayAdapter::setErrorHandler(ErrorNotifier *errorNotifier)
 
     if ( NULL == errorNotifier )
         {
-        CAMHAL_LOGEA("Invalid Error Notifier reference");
+        CAMHAL_ALOGEA("Invalid Error Notifier reference");
         ret = -EINVAL;
     }
 
@@ -369,7 +369,7 @@ int ANativeWindowDisplayAdapter::enableDisplay(int width, int height, struct tim
 
     if ( mDisplayEnabled )
         {
-        CAMHAL_LOGDA("Display is already enabled");
+        CAMHAL_ALOGDA("Display is already enabled");
         LOG_FUNCTION_NAME_EXIT;
 
         return NO_ERROR;
@@ -412,7 +412,7 @@ int ANativeWindowDisplayAdapter::enableDisplay(int width, int height, struct tim
     mPreviewWidth = width;
     mPreviewHeight = height;
 
-    CAMHAL_LOGVB("mPreviewWidth = %d mPreviewHeight = %d", mPreviewWidth, mPreviewHeight);
+    CAMHAL_ALOGVB("mPreviewWidth = %d mPreviewHeight = %d", mPreviewWidth, mPreviewHeight);
 
     LOG_FUNCTION_NAME_EXIT;
 
@@ -428,7 +428,7 @@ int ANativeWindowDisplayAdapter::disableDisplay(bool cancel_buffer)
 
     if(!mDisplayEnabled)
         {
-        CAMHAL_LOGDA("Display is already disabled");
+        CAMHAL_ALOGDA("Display is already disabled");
         LOG_FUNCTION_NAME_EXIT;
         return ALREADY_EXISTS;
     }
@@ -516,7 +516,7 @@ void ANativeWindowDisplayAdapter::destroy()
     ///Check if the display is disabled, if not disable it
     if ( mDisplayEnabled )
     {
-        CAMHAL_LOGDA("WARNING: Calling destroy of Display adapter when display enabled. Disabling display..");
+        CAMHAL_ALOGDA("WARNING: Calling destroy of Display adapter when display enabled. Disabling display..");
         disableDisplay(false);
     }
 
@@ -546,30 +546,30 @@ void* ANativeWindowDisplayAdapter::allocateBuffer(int width, int height, const c
     // Set gralloc usage bits for window.
     err = mANativeWindow->set_usage(mANativeWindow, CAMHAL_GRALLOC_USAGE);
     if (err != 0) {
-        LOGE("native_window_set_usage failed: %s (%d)", strerror(-err), -err);
+        ALOGE("native_window_set_usage failed: %s (%d)", strerror(-err), -err);
 
         if ( ENODEV == err ) {
-            CAMHAL_LOGEA("Preview surface abandoned!");
+            CAMHAL_ALOGEA("Preview surface abandoned!");
             mANativeWindow = NULL;
         }
 
         return NULL;
     }
 
-    CAMHAL_LOGDB("Number of buffers set to ANativeWindow %d", numBufs);
+    CAMHAL_ALOGDB("Number of buffers set to ANativeWindow %d", numBufs);
     ///Set the number of buffers needed for camera preview
     err = mANativeWindow->set_buffer_count(mANativeWindow, numBufs);
     if (err != 0) {
-        LOGE("native_window_set_buffer_count failed: %s (%d)", strerror(-err), -err);
+        ALOGE("native_window_set_buffer_count failed: %s (%d)", strerror(-err), -err);
 
         if ( ENODEV == err ) {
-            CAMHAL_LOGEA("Preview surface abandoned!");
+            CAMHAL_ALOGEA("Preview surface abandoned!");
             mANativeWindow = NULL;
         }
 
         return NULL;
     }
-    CAMHAL_LOGDB("Configuring %d buffers for ANativeWindow", numBufs);
+    CAMHAL_ALOGDB("Configuring %d buffers for ANativeWindow", numBufs);
     mBufferCount = numBufs;
 
     //Changing Pixel format to YUV for OMAP3
@@ -580,10 +580,10 @@ void* ANativeWindowDisplayAdapter::allocateBuffer(int width, int height, const c
             HAL_PIXEL_FORMAT_YUV /*toOMXPixFormat(format) HAL_PIXEL_FORMAT_TI_NV12*/);
 
     if (err != 0) {
-        LOGE("native_window_set_buffers_geometry failed: %s (%d)", strerror(-err), -err);
+        ALOGE("native_window_set_buffers_geometry failed: %s (%d)", strerror(-err), -err);
 
         if ( ENODEV == err ) {
-            CAMHAL_LOGEA("Preview surface abandoned!");
+            CAMHAL_ALOGEA("Preview surface abandoned!");
             mANativeWindow = NULL;
         }
 
@@ -595,7 +595,7 @@ void* ANativeWindowDisplayAdapter::allocateBuffer(int width, int height, const c
     ///@todo - Re-allocate buffers for vnf and vstab using the width, height, format, numBufs etc
     if ( mBufferHandleMap == NULL )
     {
-        CAMHAL_LOGEA("Couldn't create array for ANativeWindow buffers");
+        CAMHAL_ALOGEA("Couldn't create array for ANativeWindow buffers");
         LOG_FUNCTION_NAME_EXIT;
         return NULL;
     }
@@ -612,10 +612,10 @@ void* ANativeWindowDisplayAdapter::allocateBuffer(int width, int height, const c
         err = mANativeWindow->dequeue_buffer(mANativeWindow, (buffer_handle_t**) &hndl2hndl, &stride);
 
         if (err != 0) {
-            CAMHAL_LOGEB("dequeueBuffer failed: %s (%d)", strerror(-err), -err);
+            CAMHAL_ALOGEB("dequeueBuffer failed: %s (%d)", strerror(-err), -err);
 
             if ( ENODEV == err ) {
-                CAMHAL_LOGEA("Preview surface abandoned!");
+                CAMHAL_ALOGEA("Preview surface abandoned!");
                 mANativeWindow = NULL;
             }
 
@@ -653,10 +653,10 @@ void* ANativeWindowDisplayAdapter::allocateBuffer(int width, int height, const c
     {
         err = mANativeWindow->cancel_buffer(mANativeWindow, mBufferHandleMap[i]);
         if (err != 0) {
-            CAMHAL_LOGEB("cancel_buffer failed: %s (%d)", strerror(-err), -err);
+            CAMHAL_ALOGEB("cancel_buffer failed: %s (%d)", strerror(-err), -err);
 
             if ( ENODEV == err ) {
-                CAMHAL_LOGEA("Preview surface abandoned!");
+                CAMHAL_ALOGEA("Preview surface abandoned!");
                 mANativeWindow = NULL;
             }
 
@@ -665,7 +665,7 @@ void* ANativeWindowDisplayAdapter::allocateBuffer(int width, int height, const c
         mFramesWithCameraAdapterMap.removeItem((int) mGrallocHandleMap[i]);
 
         buffers_in_display[i]++;
-        //CAMHAL_LOGDB("buffers_in_display = %s", buffers_in_display);
+        //CAMHAL_ALOGDB("buffers_in_display = %s", buffers_in_display);
 
         //LOCK UNLOCK TO GET YUV POINTERS
         void *y_uv[2];
@@ -686,7 +686,7 @@ void* ANativeWindowDisplayAdapter::allocateBuffer(int width, int height, const c
     for (int start = 0; start < i && i > 0; start++) {
         int err = mANativeWindow->cancel_buffer(mANativeWindow, mBufferHandleMap[start]);
         if (err != 0) {
-          CAMHAL_LOGEB("cancelBuffer failed w/ error 0x%08x", err);
+          CAMHAL_ALOGEB("cancelBuffer failed w/ error 0x%08x", err);
           break;
         }
         mFramesWithCameraAdapterMap.removeItem((int) mGrallocHandleMap[start]);
@@ -694,7 +694,7 @@ void* ANativeWindowDisplayAdapter::allocateBuffer(int width, int height, const c
 
     freeBuffer(mGrallocHandleMap);
 
-    CAMHAL_LOGEA("Error occurred, performing cleanup");
+    CAMHAL_ALOGEA("Error occurred, performing cleanup");
 
     if ( NULL != mErrorNotifier.get() )
         {
@@ -716,13 +716,13 @@ uint32_t * ANativeWindowDisplayAdapter::getOffsets()
 
     if ( NULL == mANativeWindow )
     {
-        CAMHAL_LOGEA("mANativeWindow reference is missing");
+        CAMHAL_ALOGEA("mANativeWindow reference is missing");
         goto fail;
     }
 
     if( mBufferHandleMap == NULL)
     {
-        CAMHAL_LOGEA("Buffers not allocated yet!!");
+        CAMHAL_ALOGEA("Buffers not allocated yet!!");
         goto fail;
     }
 
@@ -778,10 +778,10 @@ int ANativeWindowDisplayAdapter::maxQueueableBuffers(unsigned int& queueable)
 
     ret = mANativeWindow->get_min_undequeued_buffer_count(mANativeWindow, &undequeued);
     if ( NO_ERROR != ret ) {
-        CAMHAL_LOGEB("get_min_undequeued_buffer_count failed: %s (%d)", strerror(-ret), -ret);
+        CAMHAL_ALOGEB("get_min_undequeued_buffer_count failed: %s (%d)", strerror(-ret), -ret);
 
         if ( ENODEV == ret ) {
-            CAMHAL_LOGEA("Preview surface abandoned!");
+            CAMHAL_ALOGEA("Preview surface abandoned!");
             mANativeWindow = NULL;
         }
 
@@ -828,21 +828,21 @@ status_t ANativeWindowDisplayAdapter::returnBuffersToWindow()
 
              ret = mANativeWindow->cancel_buffer(mANativeWindow, mBufferHandleMap[value]);
              if ( ENODEV == ret ) {
-                 CAMHAL_LOGEA("Preview surface abandoned!");
+                 CAMHAL_ALOGEA("Preview surface abandoned!");
                  mANativeWindow = NULL;
                  return -ret;
              } else if ( NO_ERROR != ret ) {
-                 CAMHAL_LOGEB("cancel_buffer() failed: %s (%d)",
+                 CAMHAL_ALOGEB("cancel_buffer() failed: %s (%d)",
                               strerror(-ret),
                               -ret);
                 return -ret;
              }
          }
      else
-         LOGE("mANativeWindow is NULL");
+         ALOGE("mANativeWindow is NULL");
 
      memset(buffers_in_display, '0', sizeof(char)*MAX_BUFFERS);
-     //CAMHAL_LOGDB("buffers_in_display = %s", buffers_in_display);
+     //CAMHAL_ALOGDB("buffers_in_display = %s", buffers_in_display);
 
      ///Clear the frames with camera adapter map
      mFramesWithCameraAdapterMap.clear();
@@ -862,7 +862,7 @@ int ANativeWindowDisplayAdapter::freeBuffer(void* buf)
 
     if((int *)mGrallocHandleMap != buffers)
     {
-        CAMHAL_LOGEA("CameraHal passed wrong set of buffers to free!!!");
+        CAMHAL_ALOGEA("CameraHal passed wrong set of buffers to free!!!");
         if (mGrallocHandleMap != NULL)
             delete []mGrallocHandleMap;
         mGrallocHandleMap = NULL;
@@ -945,7 +945,7 @@ void ANativeWindowDisplayAdapter::displayThread()
                 ///Get the dummy msg from the displayQ
                 if(mDisplayQ.get(&msg)!=NO_ERROR)
                     {
-                    CAMHAL_LOGEA("Error in getting message from display Q");
+                    CAMHAL_ALOGEA("Error in getting message from display Q");
                     continue;
                 }
 
@@ -985,7 +985,7 @@ bool ANativeWindowDisplayAdapter::processHalMsg()
 
         case DisplayThread::DISPLAY_START:
 
-            CAMHAL_LOGDA("Display thread received DISPLAY_START command from Camera HAL");
+            CAMHAL_ALOGDA("Display thread received DISPLAY_START command from Camera HAL");
             mDisplayState = ANativeWindowDisplayAdapter::DISPLAY_STARTED;
 
             break;
@@ -996,15 +996,15 @@ bool ANativeWindowDisplayAdapter::processHalMsg()
             ///@bug Buffers might still be w/ display and will get displayed
             ///@remarks Ideal seqyence should be something like this
             ///mOverlay->setParameter("enabled", false);
-            CAMHAL_LOGDA("Display thread received DISPLAY_STOP command from Camera HAL");
+            CAMHAL_ALOGDA("Display thread received DISPLAY_STOP command from Camera HAL");
             mDisplayState = ANativeWindowDisplayAdapter::DISPLAY_STOPPED;
 
             break;
 
         case DisplayThread::DISPLAY_EXIT:
 
-            CAMHAL_LOGDA("Display thread received DISPLAY_EXIT command from Camera HAL.");
-            CAMHAL_LOGDA("Stopping display thread...");
+            CAMHAL_ALOGDA("Display thread received DISPLAY_EXIT command from Camera HAL.");
+            CAMHAL_ALOGDA("Stopping display thread...");
             mDisplayState = ANativeWindowDisplayAdapter::DISPLAY_EXITED;
             ///Note that the SF can have pending buffers when we disable the display
             ///This is normal and the expectation is that they may not be displayed.
@@ -1014,7 +1014,7 @@ bool ANativeWindowDisplayAdapter::processHalMsg()
 
         default:
 
-            CAMHAL_LOGEB("Invalid Display Thread Command 0x%x.", msg.command);
+            CAMHAL_ALOGEB("Invalid Display Thread Command 0x%x.", msg.command);
             invalidCommand = true;
 
             break;
@@ -1024,12 +1024,12 @@ bool ANativeWindowDisplayAdapter::processHalMsg()
     if ( ( msg.arg1 ) && ( !invalidCommand ) )
         {
 
-        CAMHAL_LOGDA("+Signalling display semaphore");
+        CAMHAL_ALOGDA("+Signalling display semaphore");
         Semaphore &sem = *((Semaphore*)msg.arg1);
 
         sem.Signal();
 
-        CAMHAL_LOGDA("-Signalling display semaphore");
+        CAMHAL_ALOGDA("-Signalling display semaphore");
     }
 
 
@@ -1047,12 +1047,12 @@ status_t ANativeWindowDisplayAdapter::PostFrame(ANativeWindowDisplayAdapter::Dis
     int i;
 
     ///@todo Do cropping based on the stabilized frame coordinates
-    ///@todo Insert logic to drop frames here based on refresh rate of
+    ///@todo Insert ALOGIc to drop frames here based on refresh rate of
     ///display or rendering rate whichever is lower
     ///Queue the buffer to overlay
 
     if (!mGrallocHandleMap || !dispFrame.mBuffer) {
-        CAMHAL_LOGEA("NULL sent to PostFrame");
+        CAMHAL_ALOGEA("NULL sent to PostFrame");
         return -EINVAL;
     }
 
@@ -1075,7 +1075,7 @@ status_t ANativeWindowDisplayAdapter::PostFrame(ANativeWindowDisplayAdapter::Dis
         // Set crop only if current x and y offsets do not match with frame offsets
         if((mXOff!=xOff) || (mYOff!=yOff))
         {
-            CAMHAL_LOGDB("Offset %d xOff = %d, yOff = %d", dispFrame.mOffset, xOff, yOff);
+            CAMHAL_ALOGDB("Offset %d xOff = %d, yOff = %d", dispFrame.mOffset, xOff, yOff);
             uint8_t bytesPerPixel;
             ///Calculate bytes per pixel based on the pixel format
             if(strcmp(mPixelFormat, (const char *) CameraParameters::PIXEL_FORMAT_YUV422I) == 0)
@@ -1095,7 +1095,7 @@ status_t ANativeWindowDisplayAdapter::PostFrame(ANativeWindowDisplayAdapter::Dis
                 bytesPerPixel = 1;
             }
 
-            CAMHAL_LOGVB(" crop.left = %d crop.top = %d crop.right = %d crop.bottom = %d",
+            CAMHAL_ALOGVB(" crop.left = %d crop.top = %d crop.right = %d crop.bottom = %d",
                           xOff/bytesPerPixel, yOff , (xOff/bytesPerPixel)+mPreviewWidth, yOff+mPreviewHeight);
             // We'll ignore any errors here, if the surface is
             // already invalid, we'll know soon enough.
@@ -1124,10 +1124,10 @@ status_t ANativeWindowDisplayAdapter::PostFrame(ANativeWindowDisplayAdapter::Dis
         mapper.unlock((buffer_handle_t) mGrallocHandleMap[i]);
         ret = mANativeWindow->enqueue_buffer(mANativeWindow, mBufferHandleMap[i]);
         if (ret != 0) {
-            LOGE("Surface::queueBuffer returned error %d", ret);
+            ALOGE("Surface::queueBuffer returned error %d", ret);
         } else {
             buffers_in_display[i]++;
-            //CAMHAL_LOGDB("buffers_in_display = %s", buffers_in_display);
+            //CAMHAL_ALOGDB("buffers_in_display = %s", buffers_in_display);
         }
 
         mFramesWithCameraAdapterMap.removeItem((int) dispFrame.mBuffer);
@@ -1169,7 +1169,7 @@ status_t ANativeWindowDisplayAdapter::PostFrame(ANativeWindowDisplayAdapter::Dis
         // cancel buffer and dequeue another one
         ret = mANativeWindow->cancel_buffer(mANativeWindow, mBufferHandleMap[i]);
         if (ret != 0) {
-            LOGE("Surface::queueBuffer returned error %d", ret);
+            ALOGE("Surface::queueBuffer returned error %d", ret);
         }
 
         mFramesWithCameraAdapterMap.removeItem((int) dispFrame.mBuffer);
@@ -1201,10 +1201,10 @@ bool ANativeWindowDisplayAdapter::handleFrameReturn()
 
     err = mANativeWindow->dequeue_buffer(mANativeWindow, &buf, &stride);
     if (err != 0) {
-        CAMHAL_LOGEB("dequeueBuffer failed: %s (%d)", strerror(-err), -err);
+        CAMHAL_ALOGEB("dequeueBuffer failed: %s (%d)", strerror(-err), -err);
 
         if ( ENODEV == err ) {
-            CAMHAL_LOGEA("Preview surface abandoned!");
+            CAMHAL_ALOGEA("Preview surface abandoned!");
             mANativeWindow = NULL;
         }
 
@@ -1213,10 +1213,10 @@ bool ANativeWindowDisplayAdapter::handleFrameReturn()
 
     err = mANativeWindow->lock_buffer(mANativeWindow, buf);
     if (err != 0) {
-        CAMHAL_LOGEB("lockbuffer failed: %s (%d)", strerror(-err), -err);
+        CAMHAL_ALOGEB("lockbuffer failed: %s (%d)", strerror(-err), -err);
 
         if ( ENODEV == err ) {
-            CAMHAL_LOGEA("Preview surface abandoned!");
+            CAMHAL_ALOGEA("Preview surface abandoned!");
             mANativeWindow = NULL;
         }
 
@@ -1230,7 +1230,7 @@ bool ANativeWindowDisplayAdapter::handleFrameReturn()
     }
 
     buffers_in_display[i]--;
-    //CAMHAL_LOGDB("buffers_in_display = %s", buffers_in_display);
+    //CAMHAL_ALOGDB("buffers_in_display = %s", buffers_in_display);
 
     // lock buffer before sending to FrameProvider for filling
     bounds.left = 0;
@@ -1246,13 +1246,13 @@ bool ANativeWindowDisplayAdapter::handleFrameReturn()
         }
         return false;
       }
-      CAMHAL_LOGEA("Gralloc Lock FrameReturn Error: Sleeping 15ms");
+      CAMHAL_ALOGEA("Gralloc Lock FrameReturn Error: Sleeping 15ms");
       usleep(15000);
     }
 
     mFramesWithCameraAdapterMap.add((int) mGrallocHandleMap[i], i);
 
-    //CAMHAL_LOGVB("handleFrameReturn: found graphic buffer %d of %d", i, mBufferCount-1);
+    //CAMHAL_ALOGVB("handleFrameReturn: found graphic buffer %d of %d", i, mBufferCount-1);
     mFrameProvider->returnFrame( (void*)mGrallocHandleMap[i], CameraFrame::PREVIEW_FRAME_SYNC);
     return true;
 }
@@ -1269,12 +1269,12 @@ void ANativeWindowDisplayAdapter::frameCallbackRelay(CameraFrame* caFrame)
         }
         else
             {
-            CAMHAL_LOGEB("Invalid Cookie in Camera Frame = %p, Cookie = %p", caFrame, caFrame->mCookie);
+            CAMHAL_ALOGEB("Invalid Cookie in Camera Frame = %p, Cookie = %p", caFrame, caFrame->mCookie);
             }
         }
     else
         {
-        CAMHAL_LOGEB("Invalid Camera Frame = %p", caFrame);
+        CAMHAL_ALOGEB("Invalid Camera Frame = %p", caFrame);
     }
 
 }

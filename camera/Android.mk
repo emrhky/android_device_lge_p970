@@ -63,7 +63,7 @@ LOCAL_SRC_FILES:= \
 
 LOCAL_C_INCLUDES := hardware/ti/omap3/dspbridge/inc \
     hardware/ti/omap3/omx/system/src/openmax_il/lcml/inc \
-    $(HARDWARE_TI_OMAP3_BASE)/omx/system/src/openmax_il/omx_core/inc \
+    hardware/ti/omap3/omx/system/src/openmax_il/omx_core/inc \
     hardware/ti/omap3/omx/system/src/openmax_il/common/inc \
     hardware/ti/omap3/omx/image/src/openmax_il/jpeg_enc/inc \
     hardware/ti/omap3/libexif \
@@ -71,14 +71,15 @@ LOCAL_C_INCLUDES := hardware/ti/omap3/dspbridge/inc \
     $(LOCAL_PATH)/../hwc \
     $(LOCAL_PATH)/../include \
     $(LOCAL_PATH)/inc/V4LCameraAdapter \
-    $(LOCAL_PATH)/../libtiutils \
+    hardware/ti/omap3/libtiutils \
     hardware/ti/omap3/ion \
-    frameworks/base/include/ui \
+    frameworks/native/include \
+    frameworks/native/include/ui \
     frameworks/native/include/utils \
-    frameworks/base/include \
-    frameworks/base/include/camera \
-    frameworks/base/include/media/stagefright \
-    frameworks/base/include/media/stagefright/openmax \
+    frameworks/av/include \
+    frameworks/av/include/camera \
+    frameworks/native/include/media/hardware \
+    frameworks/native/include/media/openmax \
     external/jhead \
     external/jpeg
 
@@ -96,8 +97,8 @@ LOCAL_SHARED_LIBRARIES:= \
     libdl
 
 # --[[ LGE_UBIQUIX_MODIFIED_START : rt5604@mnbt.co.kr [2012.05.23] - CAM : beauty/panorama shot
-LOCAL_SHARED_LIBRARIES += \
-    libyuvfastconvert \
+#LOCAL_SHARED_LIBRARIES += \
+#    libyuvfastconvert \
 #--]] LGE_UBIQUIX_MODIFIED_END : rt5604@mnbt.co.kr [2012.05.23] - CAM : beauty/panorama shot
 
 LOCAL_CFLAGS := -fno-short-enums -DCOPY_IMAGE_BUFFER
@@ -157,8 +158,8 @@ LOCAL_CFLAGS += -DIMAGE_PROCESSING_PIPELINE
 endif
 
 LOCAL_MODULE_PATH := $(TARGET_OUT_SHARED_LIBRARIES)/hw
-LOCAL_MODULE:= camera.$(TARGET_BOARD_PLATFORM)
+LOCAL_MODULE:= camera.$(TARGET_BOOTLOADER_BOARD_NAME)
 LOCAL_MODULE_TAGS:= optional
 
-include $(BUILD_HEAPTRACKED_SHARED_LIBRARY)
+include $(BUILD_SHARED_LIBRARY)
 endif

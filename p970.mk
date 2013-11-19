@@ -79,6 +79,7 @@ PRODUCT_PACKAGES += \
     charger_res_images
 
 PRODUCT_PACKAGES += \
+    camera.p970 \
     power.black \
     prb \
     lgcpversion \
@@ -125,8 +126,7 @@ PRODUCT_PACKAGES += \
     libaudioutils \
     libtiutils \
     libion \
-    libomap_mm_library_jni \
-    camera.omap3
+    libomap_mm_library_jni
 
 $(call inherit-product, build/target/product/full.mk)
 
