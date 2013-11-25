@@ -32,8 +32,8 @@
 #define VIDEO_DEVICE_0      "/dev/video0"
 #define VIDEO_DEVICE_1      "/dev/video5"
 #define MEDIA_DEVICE        "/dev/media0"
-#define PREVIEW_WIDTH       640
-#define PREVIEW_HEIGHT      480
+#define PREVIEW_WIDTH       480
+#define PREVIEW_HEIGHT      640
 #define PIXEL_FORMAT        V4L2_PIX_FMT_YUYV
 //Define Cameras
 #define CAMERA_BF 0 //Back Camera
@@ -206,14 +206,14 @@ void CameraHardware::initDefaultParameters(int CameraID)
         p.set(CameraParameters::KEY_FOCUS_DISTANCES,
               FRONT_CAMERA_FOCUS_DISTANCES_STR);
         p.set(CameraParameters::KEY_SUPPORTED_JPEG_THUMBNAIL_SIZES,
-              "160x120,0x0");
+              "160x120,80x60,0x0");
         p.set(CameraParameters::KEY_JPEG_THUMBNAIL_WIDTH, "160");
         p.set(CameraParameters::KEY_JPEG_THUMBNAIL_HEIGHT, "120");
         p.set(CameraParameters::KEY_SUPPORTED_PREVIEW_FRAME_RATES, "15");
-        p.set(CameraParameters::KEY_SUPPORTED_PREVIEW_FPS_RANGE, "(7500,30000)");
-        p.set(CameraParameters::KEY_PREVIEW_FPS_RANGE, "7500,30000");
+        p.set(CameraParameters::KEY_SUPPORTED_PREVIEW_FPS_RANGE, "(8000,18000),(8000,33000)");
+        p.set(CameraParameters::KEY_PREVIEW_FPS_RANGE, "8000,18000");
 
-        p.set(CameraParameters::KEY_FOCAL_LENGTH, "0.9");
+        p.set(CameraParameters::KEY_FOCAL_LENGTH, "3.67");
 
         p.setPreviewSize(PREVIEW_WIDTH, PREVIEW_HEIGHT);
         p.setPreviewFrameRate(15);
@@ -247,14 +247,14 @@ void CameraHardware::initDefaultParameters(int CameraID)
         p.set(CameraParameters::KEY_FOCUS_DISTANCES,
               BACK_CAMERA_AUTO_FOCUS_DISTANCES_STR);
         p.set(CameraParameters::KEY_SUPPORTED_JPEG_THUMBNAIL_SIZES,
-              "320x240,0x0");
+              "320x240,160x120,80x60,0x0");
         p.set(CameraParameters::KEY_JPEG_THUMBNAIL_WIDTH, "320");
         p.set(CameraParameters::KEY_JPEG_THUMBNAIL_HEIGHT, "240");
         p.set(CameraParameters::KEY_SUPPORTED_PREVIEW_FRAME_RATES, "30");
-        p.set(CameraParameters::KEY_SUPPORTED_PREVIEW_FPS_RANGE, "(15000,30000)");
-        p.set(CameraParameters::KEY_PREVIEW_FPS_RANGE, "15000,30000");
+        p.set(CameraParameters::KEY_SUPPORTED_PREVIEW_FPS_RANGE, "(8000,18000),(8000,26000),(8000,33000)");
+        p.set(CameraParameters::KEY_PREVIEW_FPS_RANGE, "8000,33000");
 
-        p.set(CameraParameters::KEY_FOCAL_LENGTH, "3.43");
+        p.set(CameraParameters::KEY_FOCAL_LENGTH, "3.67");
 
         p.setPreviewSize(PREVIEW_WIDTH, PREVIEW_HEIGHT);
         p.setPreviewFrameRate(30);
@@ -263,10 +263,25 @@ void CameraHardware::initDefaultParameters(int CameraID)
         p.set(CameraParameters::KEY_MAX_NUM_FOCUS_AREAS, "1");
         p.set(CameraParameters::KEY_FOCUS_AREAS, "(0,0,0,0,0)");
 
+        //flash
+        p.set(CameraParameters::KEY_FLASH_MODE, CameraParameters::FLASH_MODE_OFF);
+
+        parameterString = CameraParameters::FLASH_MODE_OFF;
+        parameterString.append(",");
+        parameterString.append(CameraParameters::FLASH_MODE_ON);
+        parameterString.append(",");
+        parameterString.append(CameraParameters::FLASH_MODE_AUTO);
+        parameterString.append(",");
+        parameterString.append(CameraParameters::FLASH_MODE_RED_EYE);
+        parameterString.append(",");
+        parameterString.append(CameraParameters::FLASH_MODE_TORCH);
+        p.set(CameraParameters::KEY_SUPPORTED_FLASH_MODES,
+              parameterString.string());
+
         // zoom
         p.set(CameraParameters::KEY_ZOOM, "0");
-        p.set(CameraParameters::KEY_MAX_ZOOM, "12");
-        p.set(CameraParameters::KEY_ZOOM_RATIOS, "100,125,150,175,200,225,250,275,300,325,350,375,400");
+        p.set(CameraParameters::KEY_MAX_ZOOM, "40");
+        p.set(CameraParameters::KEY_ZOOM_RATIOS, "100,103,107,110,114,118,123,127,131,136,141,146,151,156,162,168,174,180,186,193,200,207,214,221,229,237,246,254,263,273,282,292,303,313,324,336,348,360,373,386,400");
         p.set(CameraParameters::KEY_ZOOM_SUPPORTED, "true");
 
         // scene
@@ -330,12 +345,12 @@ void CameraHardware::initDefaultParameters(int CameraID)
     p.set(CameraParameters::KEY_SCENE_MODE, CameraParameters::SCENE_MODE_AUTO);
 
     p.set(CameraParameters::KEY_EXPOSURE_COMPENSATION, "0");
-    p.set(CameraParameters::KEY_MAX_EXPOSURE_COMPENSATION, "4");
-    p.set(CameraParameters::KEY_MIN_EXPOSURE_COMPENSATION, "-4");
-    p.set(CameraParameters::KEY_EXPOSURE_COMPENSATION_STEP, "0.5");
+    p.set(CameraParameters::KEY_MAX_EXPOSURE_COMPENSATION, "20");
+    p.set(CameraParameters::KEY_MIN_EXPOSURE_COMPENSATION, "-20");
+    p.set(CameraParameters::KEY_EXPOSURE_COMPENSATION_STEP, "0.1");
 
-    p.set(CameraParameters::KEY_HORIZONTAL_VIEW_ANGLE, "51.2");
-    p.set(CameraParameters::KEY_VERTICAL_VIEW_ANGLE, "39.4");
+    p.set(CameraParameters::KEY_HORIZONTAL_VIEW_ANGLE, "47.11");
+    p.set(CameraParameters::KEY_VERTICAL_VIEW_ANGLE, "36.21");
 
     p.set(p.KEY_ROTATION, "0");
 
@@ -1257,10 +1272,10 @@ status_t CameraHardware::setParameters(const CameraParameters& params)
     if (mCameraID == CAMERA_BF) {
         int new_scene_mode = -1;
 
-        // fps range is (15000,30000) by default.
+       /* fps range is (15000,30000) by default.
         mParameters.set(CameraParameters::KEY_SUPPORTED_PREVIEW_FPS_RANGE, "(15000,30000)");
         mParameters.set(CameraParameters::KEY_PREVIEW_FPS_RANGE,
-                        "15000,30000");
+                        "15000,30000");*/
 
         if (!strcmp(new_scene_mode_str, (const char*)CameraParameters::SCENE_MODE_AUTO)) {
             new_scene_mode = SCENE_MODE_OFF;
@@ -1412,7 +1427,7 @@ status_t CameraHardware::setParameters(const CameraParameters& params)
             }
         }
 
-        /*// image effect
+        // image effect
         const char *new_image_effect_str = params.get(CameraParameters::KEY_EFFECT);
         if (new_image_effect_str != NULL) {
 
@@ -1463,7 +1478,7 @@ status_t CameraHardware::setParameters(const CameraParameters& params)
         //JPEG image quality
         int new_jpeg_quality = params.getInt(CameraParameters::KEY_JPEG_QUALITY);
         ALOGV("%s : new_jpeg_quality %d", __func__, new_jpeg_quality);
-        / we ignore bad values /
+        /* we ignore bad values */
         if (new_jpeg_quality >=1 && new_jpeg_quality <= 100) {
             if (new_jpeg_quality > 90)
                   new_jpeg_quality = JPEG_QUALITY_SUPERFINE;
@@ -1480,7 +1495,7 @@ status_t CameraHardware::setParameters(const CameraParameters& params)
             } else {
                 mParameters.set(CameraParameters::KEY_JPEG_QUALITY, new_jpeg_quality);
             }
-        }*/
+        }
     }
     // rotation
     int new_rotation = params.getInt(CameraParameters::KEY_ROTATION);
@@ -1643,6 +1658,7 @@ void CameraHardware::CreateExif(unsigned char* pInThumbnailData, int Inthumbsize
         ExifInfo.iso                        = 1;
         ExifInfo.flash                      = 0;                    // default value
 
+        //TODO: implement exif flash info
         // Flash
         // bit 0    -whether the flash fired
         // bit 1,2 -status of returned light
