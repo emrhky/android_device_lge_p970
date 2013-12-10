@@ -41,8 +41,7 @@ OMAP3_CAMERA_HAL_SRC := \
 	Encoder_libjpeg.cpp \
 	SensorListener.cpp  \
 	NV12_resize.c \
-	CameraHal_Utils.cpp \
-	converter.cpp
+	CameraHal_Utils.cpp
 
 OMAP3_CAMERA_COMMON_SRC:= \
 	CameraParameters.cpp \

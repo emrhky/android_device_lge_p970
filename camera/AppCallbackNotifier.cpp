@@ -27,6 +27,7 @@
 #include <ui/GraphicBuffer.h>
 #include <ui/GraphicBufferMapper.h>
 #include "NV12_resize.h"
+#include <yuv422yuv420.h>
 
 namespace android {
 
@@ -427,103 +428,6 @@ void AppCallbackNotifier::notifyEvent()
 
 }
 
-//--[[ LGE_UBIQUIX_MODIFIED_START : rt5604@mnbt.co.kr [2012.05.23] - CAM : beauty/panorama shot
-#if	0
-int YUV422I_to_YUV420SP(const uint8_t *src, uint8_t *dst, int w, int h)
-{
-    const uint8_t *a;
-    uint8_t *b;
-    int i, j, total_steps, stride;
-
-    // Convert Y plane
-    stride = w * 2;
-    a = src + 1;
-    b = dst;
-    total_steps = w * h;
-
-    for (i = 0; i < total_steps; i++) {
-        *b = *a;
-        a += 2;
-        b++;
-    }
-
-    // Convert U plane
-    stride = w * 2;
-    a = src + 2;
-    b = dst + (w * h);
-    for (j = 0; j < h; j += 2) {
-        for (i = 0; i < stride; i += 4) {
-            *b = *a;
-            a += 4;
-            b += 2;
-        }
-        a += stride;
-    }
-
-    // Convert V plane
-    stride = w * 2;
-    a = src;
-    b = dst + (w * h) + 1;
-    for (j = 0; j < h; j += 2) {
-        for (i = 0; i < stride; i += 4) {
-            *b = *a;
-            a += 4;
-            b += 2;
-        }
-        a += stride;
-    }
-
-    return 0;
-}
-#endif
-
-#include <yuv422yuv420.h>
-
-int YUV422I_to_YUV420SP(const uint8_t *src, uint8_t *dst, int w, int h)
-{
-    YUV422_BUF_t i_buf;
-    YUV420_BUF_t o_buf;
-    YUVWINCONV_PARAMS_t win;
-    YUV422YUV420_CONV_STATUS_t conv_res;
-
-    // input buffer
-    i_buf.buf = (uint32_t *)src;
-    i_buf.w = w;
-    i_buf.h = h;
-    i_buf.bytes = w * h * 2;
-    i_buf.fmt = YUV422_FORMAT_UYVY;
-
-    // output buffer
-    o_buf.buf = (uint16_t *) dst;
-    o_buf.w = w;
-    o_buf.h = h;
-    o_buf.bytes = w * h * 3 / 2;
-    o_buf.fmt = YUV420_FORMAT_NV21;
-
-    // window
-    win.d.x = 0;
-    win.d.y = 0;
-    win.s.x = 0;
-    win.s.y = 0;
-    win.w = w;
-    win.h = h;
-
-    conv_res = yuv422yuv420_neon (&o_buf, &i_buf, &win);
-
-    switch (conv_res) {
-        case YUV422YUV420_CONV_STATUS_OK:
-//--rt5604            ALOGD("Conversion OK");
-            break;
-        case YUV422YUV420_CONV_STATUS_ERROR:
-            ALOGE("Conversion ERROR");
-            memset( (void *) dst, 0x80, w * h * 3 / 2);
-            break;
-    }
-
-    return 0;
-}
-//--]] LGE_UBIQUIX_MODIFIED_END : rt5604@mnbt.co.kr [2012.05.23] - CAM : beauty/panorama shot
-
 /* 20120614 jungyeal@lge.com Workaround 192x144 -> 176x144 Crop  for VT [START]*/ 
 // rt5604 2012.08.13 BUG Fix for CTS testPreviewCallback
 unsigned char my_buf[720*576*2];	 	// 640*480
@@ -703,51 +607,6 @@ static void copy2Dto1D(void *dst,
 
 	// TI WA 0425
 	alignedRow = row;
-
-//iterate through each row
-//--[[ LGE_UBIQUIX_MODIFIED_START : rt5604@mnbt.co.kr [2012.05.23] - CAM : beauty/panorama shot
-#if	1
-/* 20120614 jungyeal@lge.com Workaround 192x144 -> 176x144 Crop  for VT [START] */ 
-	if (width == 192) // for only VT
-	{
-		unsigned int src_offset=0, dest_offset=0;
-		width=176;
-		row = 176*bytesPerPixel;
-		alignedRow = 192*2; 
-		
-		bufferTemp = ( unsigned char *) my_buf;
-
-		ALOGD("Crop for VT  from 192x144  to 176x144");	
-		for ( int i = 0 ; i < height ; i++,  src_offset += alignedRow, dest_offset += row) {
-			memcpy( (unsigned char *) (bufferTemp+dest_offset), (unsigned char *) (bufferSrc+src_offset), row);
-		} 
-		YUV422I_to_YUV420SP(bufferTemp, bufferDst, width, height);
-	} 
-/* 20120614 jungyeal@lge.com Workaround 192x144 -> 176x144 Crop  for VT [END] */ 	
-	else if (width == DVD_736) {		// CTS
-		unsigned int src_offset=0, dest_offset=0;
-		
-		width=DVD_720;
-		row = DVD_720*bytesPerPixel;
-		alignedRow = DVD_736*2; 
-
-		bufferTemp = ( unsigned char *) my_buf;
-		
-		ALOGD("Crop for DVD_736  from 736x576  to 720x576");	
-		for ( int i = 0 ; i < height ; i++,  src_offset += alignedRow, dest_offset += row) {
-			memcpy( (unsigned char *) (bufferTemp+dest_offset), (unsigned char *) (bufferSrc+src_offset), row);
-		} 
-		YUV422I_to_YUV420SP(bufferTemp, bufferDst, width, height);
-	} 
-	else {
-		YUV422I_to_YUV420SP(bufferSrc, bufferDst, width, height);
-	}
-#else
-    for ( int i = 0 ; i < height ; i++,  bufferSrc += alignedRow, bufferDst += row) {
-        memcpy(bufferDst, bufferSrc, row);
-    }
-#endif
-//--]] LGE_UBIQUIX_MODIFIED_END : rt5604@mnbt.co.kr [2012.05.23] - CAM : beauty/panorama shot
 }
 
 void AppCallbackNotifier::copyAndSendPictureFrame(CameraFrame* frame, int32_t msgType)
