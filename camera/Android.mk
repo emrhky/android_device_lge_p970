@@ -2,6 +2,8 @@ ifeq ($(TARGET_BOARD_PLATFORM),omap3)
 
 LOCAL_PATH:= $(call my-dir)
 
+BLACKG_OPEN_COM_DEVICE := true
+
 ifdef PRODUCT_MANUFACTURER
     LOCAL_CFLAGS += -DPRODUCT_MANUFACTURER="\"$(PRODUCT_MANUFACTURER)\""
 endif
@@ -39,7 +41,8 @@ OMAP3_CAMERA_HAL_SRC := \
 	Encoder_libjpeg.cpp \
 	SensorListener.cpp  \
 	NV12_resize.c \
-	CameraHal_Utils.cpp
+	CameraHal_Utils.cpp \
+	converter.cpp
 
 OMAP3_CAMERA_COMMON_SRC:= \
 	CameraParameters.cpp \
@@ -96,11 +99,6 @@ LOCAL_SHARED_LIBRARIES:= \
     libgui \
     libdl
 
-# --[[ LGE_UBIQUIX_MODIFIED_START : rt5604@mnbt.co.kr [2012.05.23] - CAM : beauty/panorama shot
-#LOCAL_SHARED_LIBRARIES += \
-#    libyuvfastconvert \
-#--]] LGE_UBIQUIX_MODIFIED_END : rt5604@mnbt.co.kr [2012.05.23] - CAM : beauty/panorama shot
-
 LOCAL_CFLAGS := -fno-short-enums -DCOPY_IMAGE_BUFFER
 
 ifdef HARDWARE_OMX
@@ -119,41 +117,6 @@ LOCAL_SHARED_LIBRARIES += \
 
 LOCAL_STATIC_LIBRARIES := \
         libexifgnu
-
-endif
-
-ifdef FW3A
-
-LOCAL_C_INCLUDES += \
-	hardware/ti/omap3/fw3A/include/fw/api/linux
-
-LOCAL_CFLAGS += -DFW3A
-
-LOCAL_SHARED_LIBRARIES += \
-	libicamera \
-	libicapture \
-
-endif
-
-ifdef ICAP
-
-LOCAL_C_INCLUDES += \
-	hardware/ti/omap3/mm_isp/capl/inc/
-
-LOCAL_CFLAGS += -DICAP
-
-endif
-
-ifdef IMAGE_PROCESSING_PIPELINE
-
-LOCAL_C_INCLUDES += \
-	hardware/ti/omap3/mm_isp/ipp/inc/
-
-LOCAL_SHARED_LIBRARIES += \
-	libcapl \
-	libImagePipeline \
-
-LOCAL_CFLAGS += -DIMAGE_PROCESSING_PIPELINE
 
 endif
 

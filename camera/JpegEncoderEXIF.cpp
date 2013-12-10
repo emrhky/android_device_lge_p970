@@ -331,7 +331,7 @@ exif_buffer *get_exif_buffer(void *params, void *gpsLocation)
 	
 #if defined(LGE_JUSTIN_DEVICE)
     exif_entry_set_string (pEd, EXIF_IFD_0, EXIF_TAG_MODEL, "LG-LU6800");
-#elif  defined(BLACKG_OPEN_COM_DEVICE) //daewon1004.kim@lge.com 20120925 ¸ðµ¨¸í Ãß°¡
+#elif  defined(BLACKG_OPEN_COM_DEVICE) //daewon1004.kim@lge.com 20120925
     exif_entry_set_string (pEd, EXIF_IFD_0, EXIF_TAG_MODEL, "LG-P970");
 #else
     exif_entry_set_string (pEd, EXIF_IFD_0, EXIF_TAG_MODEL, "LG-KU5900");
