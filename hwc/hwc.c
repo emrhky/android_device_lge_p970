@@ -1720,29 +1720,26 @@ static int omap3_hwc_blank(struct hwc_composer_device_1 *dev, int dpy, int blank
 
 static void omap3_hwc_reset_screen(omap3_hwc_device_t *hwc_dev)
 {
-    static int first_set = 1;
     int ret;
 
-    if (first_set) {
-        first_set = 0;
-        struct dsscomp_setup_dispc_data d = {
-                .num_mgrs = 1,
-        };
-        /* remove bootloader image from the screen as blank/unblank does not change the composition */
-        ret = ioctl(hwc_dev->dsscomp_fd, DSSCIOC_SETUP_DISPC, &d);
-        if (ret)
-            ALOGW("failed to remove bootloader image");
+    struct dsscomp_setup_dispc_data d = {
+            .num_mgrs = 1,
+    };
+    /* remove bootloader image from the screen as blank/unblank does not change the composition */
+    ret = ioctl(hwc_dev->dsscomp_fd, DSSCIOC_SETUP_DISPC, &d);
+    if (ret)
+        ALOGW("failed to remove bootloader image");
 
-        /* blank and unblank fd to make sure display is properly programmed on boot.
-         * This is needed because the bootloader can not be trusted.
-         */
-        ret = ioctl(hwc_dev->fb_fd, FBIOBLANK, FB_BLANK_POWERDOWN);
-        if (ret)
-            ALOGW("failed to blank display");
+    /* blank and unblank fd to make sure display is properly programmed on boot.
+     * This is needed because the bootloader can not be trusted.
+     */
+    ret = ioctl(hwc_dev->fb_fd, FBIOBLANK, FB_BLANK_POWERDOWN);
+    if (ret)
+        ALOGW("failed to blank display");
 
-        ret = ioctl(hwc_dev->fb_fd, FBIOBLANK, FB_BLANK_UNBLANK);
-        if (ret)
-            ALOGW("failed to blank display");
+    ret = ioctl(hwc_dev->fb_fd, FBIOBLANK, FB_BLANK_UNBLANK);
+    if (ret)
+        ALOGW("failed to blank display");
 }
 
 static int omap3_hwc_device_open(const hw_module_t* module, const char* name,
