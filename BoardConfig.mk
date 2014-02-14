@@ -119,7 +119,8 @@ WIFI_DRIVER_FW_PATH_MFG          := "/system/etc/firmware/fw_bcm4329_mfg.bin"
 WIFI_DRIVER_MODULE_NAME         := "wireless"
 WIFI_DRIVER_MODULE_PATH         := "/system/lib/modules/wireless.ko"
 WIFI_DRIVER_MODULE_ARG          := "firmware_path=/system/etc/firmware/fw_bcm4329.bin nvram_path=/system/etc/wifi/nvram.txt config_path=/data/misc/wifi/config"
-WPA_SUPPLICANT_VERSION          := VER_0_8_X
+WPA_SUPPLICANT_VERSION          := VER_0_8_X_TI
+BOARD_WIFI_SKIP_CAPABILITIES := true
 BOARD_HOSTAPD_PRIVATE_LIB := lib_driver_cmd_wext
 BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_wext
 WIFI_DRIVER_HAS_LGE_SOFTAP      := true
