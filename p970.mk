@@ -92,6 +92,9 @@ PRODUCT_PACKAGES += \
     libPERF \
     libOMX_Core \
     libLCML \
+    libion \
+    libtiutils \
+    libomap_mm_library_jni \
     libOMX.TI.Video.Decoder \
     libOMX.TI.Video.encoder \
     libOMX.TI.WBAMR.decode \
@@ -123,11 +126,9 @@ PRODUCT_PACKAGES += \
     lights.p970 \
     audio.a2dp.default \
     audio_policy.default \
+    audio.primary.omap3 \
     audio.usb.default \
     libaudioutils \
-    libtiutils \
-    libion \
-    libomap_mm_library_jni \
     #     camera.omap3 \
     
 
@@ -142,3 +143,38 @@ PRODUCT_NAME := full_p970
 PRODUCT_DEVICE := p970
 PRODUCT_MODEL := LG-P970
 PRODUCT_MANUFACTURER := LGE
+
+# Support for Browser's saved page feature. This allows
+# for pages saved on previous versions of the OS to be
+# viewed on the current OS.
+PRODUCT_PACKAGES += \
+    libskia_legacy
+
+# The OpenGL ES API level that is natively supported by this device.
+# This is a 16.16 fixed point number
+PRODUCT_PROPERTY_OVERRIDES := \
+    ro.opengles.version=131072
+
+# SGX530 is slower with the scissor optimization enabled
+PRODUCT_PROPERTY_OVERRIDES += \
+       ro.hwui.disable_scissor_opt=true
+
+# GPU Producer to CPU Consumer
+PRODUCT_PROPERTY_OVERRIDES += \
+       ro.bq.gpu_to_cpu_unsupported=1
+
+# Low RAM Device
+PRODUCT_PROPERTY_OVERRIDES += \
+       ro.config.low_ram=true
+
+# KSM
+PRODUCT_PROPERTY_OVERRIDES += \
+       ro.ksm.default=1
+       
+# Our cache partition isn't big enough for dalvik-cache.
+PRODUCT_PROPERTY_OVERRIDES += \
+        dalvik.vm.dexopt-data-only=1
+        
+# Override /proc/sys/vm/dirty_ratio on UMS
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.vold.umsdirtyratio=20
