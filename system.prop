@@ -12,6 +12,7 @@ rild.libpath=/system/lib/lge-ril.so
 rild.libargs=-d /dev/ttyspi0
 mobiledata.interfaces=vsnet0,vsnet1
 ro.telephony.ril_class=LGEInfineon
+ro.ril.enable.amr.wideband=1
 
 ro.opengles.version=131072
 dalvik.vm.dexopt-data-only=1
@@ -35,7 +36,27 @@ persist.sys.usb.config=mass_storage,adb
 #sys.mem.max_hidden_apps=5
 
 # Scissor Optimization disable
- ro.hwui.disable_scissor_opt=true
+ro.hwui.disable_scissor_opt=true
  
 # GPU Producer to CPU Consumer
- ro.bq.gpu_to_cpu_unsupported=1
+ro.bq.gpu_to_cpu_unsupported=1
+
+# Photo and video recording quality tweak 
+ro.media.enc.hprof.vid.bps=5500000
+ro.media.dec.jpeg.memcap=5500000
+ro.media.capture.maxres=5m
+ro.media.capture.fast.fps=4
+ro.media.capture.slow.fps=60
+ro.media.panorama.defres=2592x1944
+ro.media.panorama.frameres=1280x720
+ro.camcorder.videoModes=true
+ro.media.enc.hprof.vid.fps=30
+ro.media.cam.preview.fps=0
+
+# Lower JPG quality to 95%
+ro.media.enc.jpeg.quality=95
+
+# GPS
+ro.ril.def.agps.mode=1
+ro.ril.def.agps.feature=1
+ro.ril.enable.dtm=1
