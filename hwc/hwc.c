@@ -176,10 +176,10 @@ static void dump_dsscomp(struct dsscomp_setup_dispc_data *d)
 
     for (i = 0; i < d->num_mgrs; i++) {
         struct dss2_mgr_info *mi = d->mgrs + i;
-        ALOGD(" (dis%d alpha=%d col=%08x ilace=%d)\n",
+        /*ALOGD(" (dis%d alpha=%d col=%08x ilace=%d)\n",
             mi->ix,
             mi->alpha_blending, mi->default_color,
-            mi->interlaced);
+            mi->interlaced);*/
     }
 
     for (i = 0; i < d->num_ovls; i++) {
@@ -784,7 +784,7 @@ static int omap3_hwc_set_best_hdmi_mode(omap3_hwc_device_t *hwc_dev, __u32 xres,
     if (~best) {
         struct dsscomp_setup_display_data sdis = { .ix = 1, };
         sdis.mode = d.dis.modedb[best];
-        ALOGD("picking #%d", best);
+        /*ALOGD("picking #%d", best);*/
         /* only reconfigure on change */
         if (ext->last_mode != ~best)
             ioctl(hwc_dev->dsscomp_fd, DSSCIOC_SETUP_DISPLAY, &sdis);
@@ -1011,7 +1011,7 @@ static int omap3_hwc_prepare(struct hwc_composer_device_1 *dev, size_t numDispla
         hwc_dev->swap_rb = is_BGR(hwc_dev->fb_dev->base.format);
     }
   
-    if (debug) {
+    /*if (debug) {
         ALOGD("prepare (%d) - %s (comp=%d, poss=%d/%d scaled, RGB=%d,BGR=%d,NV12=%d) (ext=%s%s%ddeg%s %dex/%dmx (last %dex,%din)\n",
              dsscomp->sync_id,
              hwc_dev->use_sgx ? "SGX+OVL" : "all-OVL",
@@ -1023,7 +1023,7 @@ static int omap3_hwc_prepare(struct hwc_composer_device_1 *dev, size_t numDispla
              hwc_dev->ext.current.rotation * 90,
              hwc_dev->ext.current.hflip ? "+hflip" : "",
              hwc_dev->ext_ovls, num.max_hw_overlays, hwc_dev->last_ext_ovls, hwc_dev->last_int_ovls);
-    }
+    }*/
 
     /* setup pipes */
     dsscomp->num_ovls = hwc_dev->use_sgx;
@@ -1189,7 +1189,7 @@ static int omap3_hwc_prepare(struct hwc_composer_device_1 *dev, size_t numDispla
                     yres != hwc_dev->ext.last_yres_used ||
                     xpy < hwc_dev->ext.last_xpy * (1.f - ASPECT_RATIO_TOLERANCE) ||
                     xpy * (1.f - ASPECT_RATIO_TOLERANCE) > hwc_dev->ext.last_xpy) {
-                    ALOGD("set up HDMI for %d*%d\n", xres, yres);
+                    /*ALOGD("set up HDMI for %d*%d\n", xres, yres);*/
                     if (omap3_hwc_set_best_hdmi_mode(hwc_dev, xres, yres, xpy)) {
                         o->cfg.enabled = 0;
                         hwc_dev->ext.current.enabled = 0;
@@ -1277,7 +1277,7 @@ static int omap3_hwc_set(struct hwc_composer_device_1 *dev,
         size_t numDisplays, hwc_display_contents_1_t** displays)
 {
     if (!numDisplays || displays == NULL) {
-        ALOGD("set: empty display list");
+        /*ALOGD("set: empty display list");*/
         return 0;
     }
     hwc_display_t dpy = NULL;
@@ -1352,9 +1352,9 @@ static int omap3_hwc_set(struct hwc_composer_device_1 *dev,
         e -= snprintf(end - e, e, "%p", hwc_dev->buffers[i]);
     }
     e -= snprintf(end - e, e, "}%s\n", hwc_dev->use_sgx ? " swap" : "");
-    if (debug) {
+    /*if (debug) {
         ALOGD("%s", big_log);
-    }
+    }*/
 
     // ALOGD("set %d layers (sgx=%d)\n", dsscomp->num_ovls, hwc_dev->use_sgx);
 
@@ -1540,14 +1540,14 @@ static void handle_hotplug(omap3_hwc_device_t *hwc_dev, int state)
     }
 
     omap3_hwc_create_ext_matrix(ext);
-    ALOGI("external display changed (state=%d, mirror={%s tform=%ddeg%s}, dock={%s tform=%ddeg%s}, tv=%d", state,
+    /*ALOGI("external display changed (state=%d, mirror={%s tform=%ddeg%s}, dock={%s tform=%ddeg%s}, tv=%d", state,
          ext->mirror.enabled ? "enabled" : "disabled",
          ext->mirror.rotation * 90,
          ext->mirror.hflip ? "+hflip" : "",
          ext->dock.enabled ? "enabled" : "disabled",
          ext->dock.rotation * 90,
          ext->dock.hflip ? "+hflip" : "",
-         ext->on_tv);
+         ext->on_tv);*/
 
     pthread_mutex_unlock(&hwc_dev->lock);
 
@@ -1571,7 +1571,7 @@ static void *vsync_loop(void *param)
     setpriority(PRIO_PROCESS, 0, HAL_PRIORITY_URGENT_DISPLAY);
     memset(buf, 0, sizeof(buf));
 
-    ALOGI("Using sysfs mechanism for VSYNC notification");
+    /*ALOGI("Using sysfs mechanism for VSYNC notification");*/
 
     FD_ZERO(&exceptfds);
     FD_SET(fb0_vsync_fd, &exceptfds);
@@ -1873,9 +1873,9 @@ static int omap3_hwc_device_open(const hw_module_t* module, const char* name,
         struct hwc_rect fb_region = { .right = hwc_dev->fb_dev->base.width, .bottom = hwc_dev->fb_dev->base.height };
         hwc_dev->ext.mirror_region = fb_region;
     }
-    ALOGI("clone region is set to (%d,%d) to (%d,%d)",
+    /*ALOGI("clone region is set to (%d,%d) to (%d,%d)",
          hwc_dev->ext.mirror_region.left, hwc_dev->ext.mirror_region.top,
-         hwc_dev->ext.mirror_region.right, hwc_dev->ext.mirror_region.bottom);
+         hwc_dev->ext.mirror_region.right, hwc_dev->ext.mirror_region.bottom);*/
 
     /* read switch state */
     /*int sw_fd = open("/sys/class/switch/display_support/state", O_RDONLY);
