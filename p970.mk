@@ -122,11 +122,14 @@ PRODUCT_PACKAGES += \
     hwcomposer.black \
     lights.p970 \
     audio.a2dp.default \
+    audio_policy.default \
     audio.usb.default \
     libaudioutils \
     libtiutils \
     libion \
-    libomap_mm_library_jni
+    libomap_mm_library_jni \
+    #     camera.omap3 \
+    
 
 $(call inherit-product, build/target/product/full.mk)
 
